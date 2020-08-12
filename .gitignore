@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Custom
+## IDE Files
+*.kate-swp
+*.user
+*.autosave
