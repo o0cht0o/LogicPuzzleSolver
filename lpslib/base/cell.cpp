@@ -2,31 +2,61 @@
 
 using namespace LPS;
 
-Cell::Cell(short group, short shape, short num)
-	: group(group), shape(shape), num(num){}
+Cell::Cell(short g, short s, short n)
+	: group(g), shape(s), num(n){}
 
-short Cell::get(char t) const{
-	switch(t){
-	case 'g':
+short Cell::get(Data d) const{
+	switch(d){
+	case Data_group:
 		return group;
-	case 's':
+	case Data_group_back:
+		return group & groupmask;
+	case Data_group_front:
+		return group>>groups & groupmask;
+	case Data_shape:
 		return shape;
-	case 'n':
+	case Data_shape_shape:
+		return shape & shapesmask;
+	case Data_shape_linestyle:
+		return shape & shapelmask;
+	case Data_shape_direction:
+		return shape & shapedmask;
+	case Data_num:
 		return num;
 	default:
 		return -1;
 	}
 }
 
-void Cell::set(short data, char t){
-	switch(t){
-	case 'g':
+void Cell::set(short data, Data d){
+	switch(d){
+	case Data_group:
 		group = data;
 		return;
-	case 's':
+	case Data_group_back:
+		shape &= ~groupmask;
+		shape |= data & shapesmask;
+		return;
+	case Data_group_front:
+		shape &= ~(groupmask<<groups);
+		shape |= (data & shapesmask)<<groups;
+		return;
+	case Data_shape:
 		shape = data;
 		return;
-	case 'n':
+	case Data_shape_shape:
+		shape &= ~shapesmask;
+		shape |= data & shapesmask;
+		return;
+	case Data_shape_linestyle:
+		shape &= ~shapelmask;
+		shape |= data & shapelmask;
+		return;
+	case Data_shape_direction:
+		shape &= ~shapedmask;
+		shape |= data & shapedmask;
+		return;
+	case Data_num:
 		num = data;
 	default:
 		return;
@@ -34,7 +64,9 @@ void Cell::set(short data, char t){
 }
 
 void Cell::set(short g, short s, short n){
-	*this={g,s,n};
+	this->group = g;
+	this->shape = s;
+	this->num = n;
 }
 
 void Cell::Mask(bool zero){
@@ -60,4 +92,11 @@ void Cell::Masksub(short n){
 	num ^= 1<<n+4;
 	num--;
 	return;
+}
+
+Cell& Cell::operator=(const Cell& t){
+	this->group = t.group;
+	this->shape = t.shape;
+	this->num = t.num;
+	return *this;
 }
