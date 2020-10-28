@@ -7,8 +7,8 @@ private:
 	static const short
 		groups = sizeof(short)<<2,
 		shapes = 6,
-		shapel = 2,
-		shaped = 3,
+		shapel = 4,
+		shaped = 2,
 		groupmask = (1<<groups)-1,
 		shapesmask = (1<<shapes)-1,
 		shapelmask = (1<<shapel)-1<<shapes,
@@ -26,7 +26,7 @@ public:
 		Data_group_front,
 		Data_shape,
 		Data_shape_shape,
-		Data_shape_linestyle,
+		Data_shape_style,
 		Data_shape_direction,
 		Data_num
 	};
@@ -35,7 +35,6 @@ public:
 		Shape_dot,
 		Shape_cross,
 		Shape_circle,
-		Shape_circle_d,
 		Shape_triangle,
 		Shape_square,
 		Shape_diamond,
@@ -43,13 +42,14 @@ public:
 		Shape_slash,
 		Shape_blod	= 1<<shapes,
 		Shape_dash	= 2<<shapes,
-		Shape_nodir	= 0<<shapes+shapel,
+		Shape_dir	= 4<<shapes,
+		Shape_fill	= 8<<shapes,
+		Shape_vdir	= 0<<shapes+shapel,
 		Shape_hdir	= 1<<shapes+shapel,
-		Shape_vdir	= 2<<shapes+shapel,
-		Shape_up	= 4<<shapes+shapel,
-		Shape_left	= 5<<shapes+shapel,
-		Shape_down	= 6<<shapes+shapel,
-		Shape_right	= 7<<shapes+shapel,
+		Shape_up	= 0<<shapes+shapel,
+		Shape_left	= 1<<shapes+shapel,
+		Shape_down	= 2<<shapes+shapel,
+		Shape_right	= 3<<shapes+shapel,
 	};
 	enum Group: short {
 		Group_null=0,
@@ -65,11 +65,8 @@ public:
 	virtual void set(short, short, short);
 
 	virtual void Mask(bool=false); // No Zero
-	virtual void Maskadd(short);
-	virtual void Masksub(short);
-
-	bool Bold() const;
-	bool Dashed() const;
+	virtual short Maskadd(short);
+	virtual short Masksub(short);
 
 	Cell& operator=(const Cell&);
 };

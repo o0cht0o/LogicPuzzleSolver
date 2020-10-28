@@ -21,7 +21,6 @@ protected:
 public:
 	Solver();
 	Solver(vector<vector<Cell*>>&);
-	~Solver();
 
 	enum ToB : short {
 		dot=0b00,

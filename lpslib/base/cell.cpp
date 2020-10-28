@@ -17,7 +17,7 @@ short Cell::get(Data d) const{
 		return shape;
 	case Data_shape_shape:
 		return shape & shapesmask;
-	case Data_shape_linestyle:
+	case Data_shape_style:
 		return shape & shapelmask;
 	case Data_shape_direction:
 		return shape & shapedmask;
@@ -48,7 +48,7 @@ void Cell::set(short data, Data d){
 		shape &= ~shapesmask;
 		shape |= data & shapesmask;
 		return;
-	case Data_shape_linestyle:
+	case Data_shape_style:
 		shape &= ~shapelmask;
 		shape |= data & shapelmask;
 		return;
@@ -78,20 +78,20 @@ bool Cell::Maskcheck() const{
 	return num&1<<14;
 }
 
-void Cell::Maskadd(short n){
-	if(!Maskcheck()) return;
-	if(num&1<<n+4) return;
+short Cell::Maskadd(short n){
+	if(!Maskcheck()) return 2;
+	if(num&1<<n+4) return 1;
 	num ^= 1<<n+4;
 	num++;
-	return;
+	return 0;
 }
 
-void Cell::Masksub(short n){
-	if(!Maskcheck()) return;
-	if(~num&1<<n+4) return;
+short Cell::Masksub(short n){
+	if(!Maskcheck()) return 2;
+	if(~num&1<<n+4) return 1;
 	num ^= 1<<n+4;
 	num--;
-	return;
+	return 0;
 }
 
 Cell& Cell::operator=(const Cell& t){

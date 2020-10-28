@@ -43,15 +43,15 @@ void Solver::clean(){
 	}
 	for(short i=0;i<c;i++){
 		this->get(i,0,1,0).set(Cell::Shape_blod,
-							   Cell::Data_shape_linestyle);
+							   Cell::Data_shape_style);
 		this->get(i,r,1,0).set(Cell::Shape_blod,
-								Cell::Data_shape_linestyle);
+								Cell::Data_shape_style);
 	}
 	for(short i=0;i<r;i++){
 		this->get(0,i,0,1).set(Cell::Shape_blod,
-							   Cell::Data_shape_linestyle);
+							   Cell::Data_shape_style);
 		this->get(c,i,0,1).set(Cell::Shape_blod,
-							   Cell::Data_shape_linestyle);
+							   Cell::Data_shape_style);
 	}
 }
 

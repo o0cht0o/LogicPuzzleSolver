@@ -6,25 +6,27 @@
 
 using namespace LPS;
 
+short CellQ::widCell=40;
+
 CellQ::CellQ(QWidget *parent)
 	: QWidget(parent), Cell(){
-	setMinimumSize(config.widCell, config.widCell);
-	setGeometry(0,0,config.widCell,config.widCell);
+	setMinimumSize(widCell, widCell);
+	setGeometry(0,0,widCell,widCell);
 }
 
 CellQ::CellQ(const CellQ& c)
 	: QWidget(c.parentWidget()), Cell(c){
-	setMinimumSize(config.widCell, config.widCell);
-	setGeometry(0,0,config.widCell,config.widCell);
+	setMinimumSize(widCell, widCell);
+	setGeometry(0,0,widCell,widCell);
 }
 
-void CellQ::paintEvent(QPaintEvent *){
+void CellQ::paintEvent(QPaintEvent *){/*
 	QPainter p(this);
 	p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	QBrush brush(config.getColor(get(Data_group)&0xFF));
 	QPen pn(config.pen);
-	if(get(Data_shape_linestyle)){
-		int i=get(Data_shape_linestyle);
+	if(get(Data_shape_style)){
+		int i=get(Data_shape_style);
 		if(i&Shape_dash) pn.setStyle(config.dbpen.style());
 		if(i&Shape_blod) pn.setWidth(config.dbpen.width());
 	}
@@ -123,11 +125,17 @@ void CellQ::mousePressEvent(QMouseEvent *event)
 	update();
 }
 
-void CellQ::mouseReleaseEvent(QMouseEvent *event)
-{
+void CellQ::mouseReleaseEvent(QMouseEvent *event){
 	isPress = false;
 	QWidget::mouseReleaseEvent(event);
 	update();
+}
+
+CellQ& CellQ::operator=(Cell& c){
+	group = c.get(Data_group);
+	shape = c.get(Data_shape);
+	num = c.get(Data_num);
+	return *this;
 }
 
 
@@ -135,6 +143,7 @@ void CellQ::set(short n, Data d){
 	Cell::set(n, d);
 	update();
 }
+
 void CellQ::set(short g, short s, short n){
 	Cell::set(g, s, n);
 	update();
@@ -144,18 +153,15 @@ void CellQ::Mask(bool zero){
 	Cell::Mask(zero);
 	update();
 }
-void CellQ::Maskadd(short n){
-	Cell::Maskadd(n);
-	update();
-}
-void CellQ::Masksub(short n){
-	Cell::Masksub(n);
-	update();
+
+short CellQ::Maskadd(short n){
+	short r=Cell::Maskadd(n);
+	if(!r) update();
+	return r;
 }
 
-CellQ& CellQ::operator=(Cell& c){
-	group = c.get(Data_group);
-	shape = c.get(Data_shape);
-	num = c.get(Data_num);
-	return *this;
+short CellQ::Masksub(short n){
+	short r=Cell::Masksub(n);
+	if(!r) update();
+	return r;
 }
