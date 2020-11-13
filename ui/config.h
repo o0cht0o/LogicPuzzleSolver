@@ -28,7 +28,6 @@ public:
 
 	QPalette& Palette();
 	void updataSS();
-	QColor& getColor(short);
 };
 
 static Config config;

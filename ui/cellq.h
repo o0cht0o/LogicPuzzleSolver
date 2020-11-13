@@ -14,7 +14,12 @@ public:
 
 
 private:
-	static short widCell;
+	static short widCell,
+	widPan,
+	widShape;
+	static QColor mainColor;
+
+	inline const QColor getColor(short);
 
 protected:
 	bool isHover=false, isPress=false;

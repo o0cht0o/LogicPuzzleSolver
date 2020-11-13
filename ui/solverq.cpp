@@ -12,7 +12,7 @@ using namespace LPS;
 SolverQ::SolverQ(QWidget *parent)
 	: QWidget(parent){
 	s = new Solver(wp);
-	resizeS(2, 2);
+	resizeS(3, 3);
 	s->clean();
 }
 
@@ -33,8 +33,8 @@ void SolverQ::resizeS(short col, short row,
 		for(short j=0; j<tmp; j++)
 			if(i&1^~j&1) i&1? w[i][j].lower():w[i][j].raise();
 	s->resize(col, row, cb, rb);
-	setMinimumSize(tmpc*config.widCell+config.widCell&~1,
-				   tmpr*config.widCell+config.widCell&~1);
+	setMinimumSize(tmpc*CellQ::Widcell()+CellQ::Widcell()&~1,
+				   tmpr*CellQ::Widcell()+CellQ::Widcell()&~1);
 	resizeEvent(nullptr);
 }
 

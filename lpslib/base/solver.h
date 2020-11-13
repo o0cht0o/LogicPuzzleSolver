@@ -17,6 +17,7 @@ private:
 protected:
 	vector<vector<Cell*>>& w;
 	short r,c;
+	static const short io;
 
 public:
 	Solver();
@@ -42,11 +43,12 @@ public:
 
 	const short& nc,& nr;
 
-	virtual void clean();
-	void resize(short col, short row,
-				bool cb=true, bool rb=true);
 	Cell& get(short col, short row,
 			  bool cb=true, bool rb=true) const;
+	void resize(short col, short row,
+				bool cb=true, bool rb=true);
+
+	virtual void clean();
 	virtual short solve();
 };
 }
