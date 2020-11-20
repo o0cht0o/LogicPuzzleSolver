@@ -67,6 +67,7 @@ void Cell::set(short g, short s, short n){
 	this->group = g;
 	this->shape = s;
 	this->num = n;
+	MaskCor();
 }
 
 void Cell::Mask(bool zero){
@@ -74,12 +75,19 @@ void Cell::Mask(bool zero){
 	if(!group) group = -1;
 }
 
-bool Cell::Maskcheck() const{
+bool Cell::isMask() const{
 	return num&1<<14;
 }
 
+void Cell::MaskCor() {
+	if(!isMask()) return;
+	num &= ~0xF;
+	for(short i=0;i<10;i++)
+		if(num&1<<i+4) num++;
+}
+
 short Cell::Maskadd(short n){
-	if(!Maskcheck()) return 2;
+	if(!isMask()) return 2;
 	if(num&1<<n+4) return 1;
 	num ^= 1<<n+4;
 	num++;
@@ -87,7 +95,7 @@ short Cell::Maskadd(short n){
 }
 
 short Cell::Masksub(short n){
-	if(!Maskcheck()) return 2;
+	if(!isMask()) return 2;
 	if(~num&1<<n+4) return 1;
 	num ^= 1<<n+4;
 	num--;

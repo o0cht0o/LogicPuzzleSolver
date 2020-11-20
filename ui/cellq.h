@@ -18,11 +18,12 @@ private:
 	widPan,
 	widShape;
 	static QColor mainColor;
+	static QFont font;
 
-	inline const QColor getColor(short);
+	inline const QColor getColor(short, bool=true);
 
 protected:
-	bool isHover=false, isPress=false;
+	bool isHover=false, isFouce=false;
 
 	void paintEvent(QPaintEvent *) override;
 	void enterEvent(QEvent *event) override;
@@ -47,6 +48,11 @@ public:
 	virtual void Mask(bool=false) override; // No Zero
 	virtual short Maskadd(short) override;
 	virtual short Masksub(short) override;
+
+	void setfouce(bool=true);
+signals:
+	void enfouce();
+
 };
 }
 

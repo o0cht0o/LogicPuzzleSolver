@@ -9,7 +9,7 @@ public:
 
 	Solverdefine(){
 		list[Solver::dot].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null, Cell::Shape_dot, 0));
-		list[Solver::block].push_back(Cell(0,0,0));
+		list[Solver::block].push_back(Cell(0,0));
 		list[Solver::vline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null,
 						   Cell::Shape_line|Cell::Shape_vdir, 0));
 		list[Solver::hline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null,
@@ -57,7 +57,6 @@ void Solver::resize(short col, short row,
 	c=tmpc, r=tmpr;
 }
 
-
 void Solver::clean(){
 	for(short i=0;i<=c<<1;i++){
 		short bi = i<<1&2;
@@ -76,22 +75,14 @@ void Solver::clean(){
 		this->get(c,i,0,1).set(Cell::Shape_blod,
 							   Cell::Data_shape_style);
 	}
-	this->get(0,0,0,0).set(Cell::Shape_blod|Cell::Shape_dir|Cell::Shape_fill,
+	this->get(0,0,0,0).set(Cell::Shape_blod,
 						   Cell::Data_shape_style);
-	this->get(c,0,0,0).set(Cell::Shape_blod|Cell::Shape_dir|Cell::Shape_fill,
+	this->get(c,0,0,0).set(Cell::Shape_blod,
 						   Cell::Data_shape_style);
-	this->get(0,r,0,0).set(Cell::Shape_blod|Cell::Shape_dir,
+	this->get(0,r,0,0).set(Cell::Shape_blod,
 						   Cell::Data_shape_style);
-	this->get(c,r,0,0).set(Cell::Shape_blod|Cell::Shape_dir,
+	this->get(c,r,0,0).set(Cell::Shape_blod,
 						   Cell::Data_shape_style);
-	this->get(0,0,0,0).set(Cell::Shape_up,
-						   Cell::Data_shape_direction);
-	this->get(c,0,0,0).set(Cell::Shape_left,
-						   Cell::Data_shape_direction);
-	this->get(0,r,0,0).set(Cell::Shape_down,
-						   Cell::Data_shape_direction);
-	this->get(c,r,0,0).set(Cell::Shape_right,
-						   Cell::Data_shape_direction);
 }
 
 short Solver::solve(){

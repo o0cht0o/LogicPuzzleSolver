@@ -21,6 +21,7 @@ Mainui::Mainui(QWidget *parent) : QWidget(parent){
 	solve = new QPushButton("&Run", this);
 
 	solver = new SolverQ(this);
+	connect(solve, SIGNAL(clicked()), solver, SLOT(run()));
 
 	auto cLayout = new QHBoxLayout;
 	cLayout->addWidget(solvertype,1);

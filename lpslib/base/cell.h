@@ -16,7 +16,8 @@ private:
 
 protected:
 	short group, shape, num;
-	bool Maskcheck() const;
+	bool isMask() const;
+	void MaskCor();
 
 public:
 	enum Data: short {
@@ -47,9 +48,9 @@ public:
 		Shape_vdir	= 0<<shapes+shapel,
 		Shape_hdir	= 1<<shapes+shapel,
 		Shape_up	= 0<<shapes+shapel,
-		Shape_left	= 1<<shapes+shapel,
+		Shape_right	= 1<<shapes+shapel,
 		Shape_down	= 2<<shapes+shapel,
-		Shape_right	= 3<<shapes+shapel,
+		Shape_left	= 3<<shapes+shapel,
 	};
 	enum Group: short {
 		Group_null=0,
