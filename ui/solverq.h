@@ -3,8 +3,14 @@
 
 #include <QWidget>
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
+
+QT_BEGIN_NAMESPACE
+class QString;
+QT_END_NAMESPACE
 
 namespace LPS {
 
@@ -22,11 +28,19 @@ private:
 	vector<vector<Cell*>> wp;
 	short fouce[2] = {-1, -1};
 
-	enum class Mode: short{
+	enum Mode: short{
 		Mode_Input,
 		Mode_Play,
 		Mode_Solve
 	}mode;
+
+	inline short Md();
+	void clean_io(short);
+	CellQ* Fouce();
+	void enFouce(short=-1, short=-1);
+	bool checkMd(short=-1, short=-1);
+	short changeFouce_(short,bool);
+	void changeFouce(int);
 
 public:
 	explicit SolverQ(QWidget *parent = nullptr);
@@ -34,14 +48,14 @@ public:
 	void resizeS(short col, short row,
 				bool cb=true, bool rb=true);
 
-	void clean_io(short);
-	inline CellQ* Fouce();
 
 protected:
 	virtual void resizeEvent(QResizeEvent*) override;
+	virtual void keyPressEvent(QKeyEvent*) override;
 
 public slots:
 	void run();
+	void changeSolver(const QString&);
 };
 }
 

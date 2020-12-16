@@ -1,8 +1,7 @@
 #include "cellq.h"
 
-#include "config.h"
-
 #include <QPainter>
+#include <QMouseEvent>
 
 using namespace LPS;
 
@@ -51,7 +50,7 @@ void CellQ::paintEvent(QPaintEvent *){
 	p.rotate(90*(get(Data_shape_direction))/Shape_hdir);
 	switch (get(Data_shape_shape)){
 	case Shape_blank:
-		font.setPixelSize(2*rShape);
+		font.setPixelSize(get(Data_shape)&Shape_dir?2*rShape*widShape/100:2*rShape);
 		break;
 	case Shape_dot:
 		p.drawPoint(0,0);
@@ -62,6 +61,7 @@ void CellQ::paintEvent(QPaintEvent *){
 		p.drawLine(QPointF(-r,r), QPointF(r,-r));}
 		break;
 	case Shape_circle:
+		font.setPixelSize(1.8*rShape*widShape/100);
 		p.setRenderHints(QPainter::Antialiasing);
 		p.drawEllipse(QPointF(0,0), rShape, rShape);
 		break;
@@ -72,9 +72,12 @@ void CellQ::paintEvent(QPaintEvent *){
 			QPointF(rShape, rShape),
 			QPointF(-rShape, rShape)
 		};
-		p.drawPolygon(tri,3);}
+		p.rotate(-90*(get(Data_shape_direction))/Shape_hdir);
+		p.drawPolygon(tri,3);
+		p.rotate(90*(get(Data_shape_direction))/Shape_hdir);}
 		break;
 	case Shape_square:
+		font.setPixelSize(2*rShape*widShape/100);
 		p.setRenderHints(QPainter::Antialiasing);
 		p.drawRect(QRectF(QPointF(-rShape, -rShape),
 						  QPointF(rShape, rShape)));
@@ -99,7 +102,6 @@ void CellQ::paintEvent(QPaintEvent *){
 	}
 	p.setRenderHints(QPainter::Antialiasing);
 	if(get(Data_shape)&Shape_dir){
-		font.setPixelSize(2*rShape*widShape/100);
 		pn.setStyle(Qt::SolidLine);
 		QPen tmp(pn);
 		tmp.setWidth(penwid);
@@ -110,16 +112,17 @@ void CellQ::paintEvent(QPaintEvent *){
 		p.drawEllipse(QPointF(0, -rShape), 1.5*penwid, 1.5*penwid);
 	}
 
+	p.resetTransform();
+	p.scale((qreal)width()/widCell,(qreal)height()/widCell);
+	p.translate(widCell/2.0,widCell/2.0);
 	switch (get(Data_shape_shape)){
-	case Shape_circle:
 	case Shape_triangle:
-	case Shape_square:
+		p.translate(0,widCell/10.0);
 	case Shape_diamond:
-		font.setPixelSize(2*rShape*widShape/100);
+		font.setPixelSize(1.5*rShape*widShape/100);
+	case Shape_square:
+	case Shape_circle:
 	case Shape_blank:
-		p.resetTransform();
-		p.scale((qreal)width()/widCell,(qreal)height()/widCell);
-		p.translate(widCell/2.0,widCell/2.0);
 		QString disp;
 		if(isMask()){
 			for(short i=0;i<10;i++)
@@ -199,13 +202,11 @@ void CellQ::leaveEvent(QEvent *event)
 
 void CellQ::mousePressEvent(QMouseEvent *event)
 {
-	emit enfouce();
-	isFouce=true;
-	QWidget::mousePressEvent(event);
-	set(rand(),Data_shape);
-	set(rand(),Data_group);
-	set(rand(),Data_num);
-	update();
+	if(event->button() == Qt::LeftButton){
+		emit enfouce();
+		QWidget::mousePressEvent(event);
+		update();
+	}
 }
 
 void CellQ::mouseReleaseEvent(QMouseEvent *event){
@@ -245,6 +246,12 @@ short CellQ::Maskadd(short n){
 
 short CellQ::Masksub(short n){
 	short r=Cell::Masksub(n);
+	if(!r) update();
+	return r;
+}
+
+short CellQ::Maskxor(short n){
+	short r=Cell::Maskxor(n);
 	if(!r) update();
 	return r;
 }

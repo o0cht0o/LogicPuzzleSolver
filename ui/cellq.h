@@ -48,6 +48,7 @@ public:
 	virtual void Mask(bool=false) override; // No Zero
 	virtual short Maskadd(short) override;
 	virtual short Masksub(short) override;
+	virtual short Maskxor(short) override;
 
 	void setfouce(bool=true);
 signals:

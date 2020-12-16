@@ -2,26 +2,28 @@
 #define SOLVER_H
 
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 namespace LPS{
 
 class Cell;
+typedef vector<vector<Cell*>> CellMap;
 
 class Solver{
 private:
 	vector<vector<Cell>> world;
-	vector<vector<Cell*>> wp;
+	CellMap wp;
 
 protected:
-	vector<vector<Cell*>>& w;
+	CellMap& w;
 	short r,c;
-	static const short io;
 
 public:
 	Solver();
-	Solver(vector<vector<Cell*>>&);
+	Solver(CellMap&);
 
 	enum ToB : short {
 		dot=0b00,
@@ -48,7 +50,10 @@ public:
 	void resize(short col, short row,
 				bool cb=true, bool rb=true);
 
+	virtual inline short io(){return 0x9;};
 	virtual void clean();
+	virtual void clean(short, short);
+	virtual void check();
 	virtual short solve();
 };
 }

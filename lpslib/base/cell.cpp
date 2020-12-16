@@ -34,12 +34,12 @@ void Cell::set(short data, Data d){
 		group = data;
 		return;
 	case Data_group_back:
-		shape &= ~groupmask;
-		shape |= data & shapesmask;
+		group &= ~groupmask;
+		group |= data & shapesmask;
 		return;
 	case Data_group_front:
-		shape &= ~(groupmask<<groups);
-		shape |= (data & shapesmask)<<groups;
+		group &= ~(groupmask<<groups);
+		group |= (data & shapesmask)<<groups;
 		return;
 	case Data_shape:
 		shape = data;
@@ -99,6 +99,13 @@ short Cell::Masksub(short n){
 	if(~num&1<<n+4) return 1;
 	num ^= 1<<n+4;
 	num--;
+	return 0;
+}
+
+short Cell::Maskxor(short n){
+	if(!isMask()) return 2;
+	num ^= 1<<n+4;
+	num&1<<n+4? num++:num--;
 	return 0;
 }
 

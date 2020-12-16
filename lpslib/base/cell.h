@@ -41,6 +41,7 @@ public:
 		Shape_diamond,
 		Shape_line,
 		Shape_slash,
+		Shape_num,
 		Shape_blod	= 1<<shapes,
 		Shape_dash	= 2<<shapes,
 		Shape_dir	= 4<<shapes,
@@ -68,6 +69,7 @@ public:
 	virtual void Mask(bool=false); // No Zero
 	virtual short Maskadd(short);
 	virtual short Masksub(short);
+	virtual short Maskxor(short);
 
 	Cell& operator=(const Cell&);
 };

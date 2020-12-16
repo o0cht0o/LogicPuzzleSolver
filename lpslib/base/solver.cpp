@@ -18,12 +18,10 @@ public:
 
 }Sd={};
 
-const short Solver::io=0;
-
 Solver::Solver()
 	:w(wp), nc(c), nr(r), c(0), r(0){}
 
-Solver::Solver(vector<vector<Cell*>>& W)
+Solver::Solver(CellMap& W)
 	:w(W), nc(c), nr(r){
 	if(!w.size()||!w[0].size()){
 		c = r = 0;
@@ -59,32 +57,17 @@ void Solver::resize(short col, short row,
 
 void Solver::clean(){
 	for(short i=0;i<=c<<1;i++){
-		short bi = i<<1&2;
 		for(short j=0;j<=r<<1;j++)
-			*w[i][j] = Sd.list[bi | j&1][0];
+			clean(i,j);
 	}
-	for(short i=0;i<c;i++){
-		this->get(i,0,1,0).set(Cell::Shape_blod,
-							   Cell::Data_shape_style);
-		this->get(i,r,1,0).set(Cell::Shape_blod,
-								Cell::Data_shape_style);
-	}
-	for(short i=0;i<r;i++){
-		this->get(0,i,0,1).set(Cell::Shape_blod,
-							   Cell::Data_shape_style);
-		this->get(c,i,0,1).set(Cell::Shape_blod,
-							   Cell::Data_shape_style);
-	}
-	this->get(0,0,0,0).set(Cell::Shape_blod,
-						   Cell::Data_shape_style);
-	this->get(c,0,0,0).set(Cell::Shape_blod,
-						   Cell::Data_shape_style);
-	this->get(0,r,0,0).set(Cell::Shape_blod,
-						   Cell::Data_shape_style);
-	this->get(c,r,0,0).set(Cell::Shape_blod,
-						   Cell::Data_shape_style);
 }
 
-short Solver::solve(){
-	return 0;
+void Solver::clean(short i, short j){
+	*w[i][j] = Sd.list[i<<1&2 | j&1][0];
+	if(!i || !j || i==nc<<1 || j==nr<<1)
+		w[i][j]->set(Cell::Shape_blod, Cell::Data_shape_style);
 }
+
+inline void Solver::check(){}
+
+inline short Solver::solve(){return 0;}
