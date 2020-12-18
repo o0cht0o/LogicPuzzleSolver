@@ -214,7 +214,7 @@ void CellQ::mouseReleaseEvent(QMouseEvent *event){
 	update();
 }
 
-CellQ& CellQ::operator=(Cell& c){
+CellQ& CellQ::operator=(const Cell& c){
 	group = c.get(Data_group);
 	shape = c.get(Data_shape);
 	num = c.get(Data_num);

@@ -13,9 +13,6 @@ using namespace LPS;
 SolverQ::SolverQ(QWidget *parent)
 	: QWidget(parent), mode(Mode::Mode_Input), s(nullptr){
 	this->grabKeyboard();
-	/*s = new Solver(wp);
-	resizeS(9, 9);
-	s->clean();*/
 }
 
 void SolverQ::resizeS(short col, short row,
@@ -30,6 +27,7 @@ void SolverQ::resizeS(short col, short row,
 			w[i][j].setParent(this);
 			wp[i][j]=&w[i][j];
 			connect(&w[i][j],&CellQ::enfouce,this,[=]{enFouce(i, j);});
+			w[i][j].show();
 		}
 	}
 	for(short i=0;i < w.size();i++)
@@ -37,7 +35,6 @@ void SolverQ::resizeS(short col, short row,
 			if(i&1^~j&1) i&1? w[i][j].lower():w[i][j].raise();
 	s->resize(col, row, cb, rb);
 	setMinimumSize(CellQ::Widcell()*(tmpc+1), CellQ::Widcell()*(tmpr+1));
-	resizeEvent(nullptr);
 	clean_io(Md());
 }
 
@@ -290,4 +287,14 @@ void SolverQ::run(){
 void SolverQ::changeSolver(const QString& svt){
 	if(s) delete s;
 	s = SolverList::getList().creat(svt.toStdString(), wp);
+	if(!s) {
+		setMinimumSize(CellQ::Widcell(), CellQ::Widcell());
+		for(auto i:wp)
+			for(auto j:i)
+				((CellQ*)j)->hide();
+		return;
+	}
+	resizeS(s->nc, s->nr);
+	s->clean();
+	update();
 }

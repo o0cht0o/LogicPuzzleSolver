@@ -13,10 +13,20 @@ Sudoku::Sudoku()
 
 Sudoku::Sudoku(CellMap& W)
 	:Solver(W){
-	clean();
+	resize(9,9);
 }
 
-void Sudoku::clean(){}
-void Sudoku::clean(short, short){}
+void Sudoku::clean(){
+	if(&w==&wp) resize(9,9);
+	for(short i=0;i<=c<<1;i++)
+		for(short j=0;j<=r<<1;j++)
+			clean(i, j);
+}
+
+void Sudoku::clean(short i, short j){
+	Solver::clean(01221, i, j);
+	if(i%6==0||j%6==0)
+		w[i][j]->set(Cell::Shape_blod, Cell::Data_shape_style);
+}
 void Sudoku::check(){}
 short Sudoku::solve(){}

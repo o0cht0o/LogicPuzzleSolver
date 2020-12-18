@@ -37,9 +37,9 @@ public:
 	inline static void setWidcell(short w){
 		widCell=w;}
 
-	CellQ& operator=(Cell&);
-	inline CellQ& operator=(CellQ& c){
-		return *this=(Cell&)c;}
+	CellQ& operator=(const Cell&);
+	inline CellQ& operator=(const CellQ& c){
+		return *this=(const Cell&)c;}
 
 
 	virtual void set(short, Data=Data_num) override;

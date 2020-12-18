@@ -15,9 +15,9 @@ typedef vector<vector<Cell*>> CellMap;
 class Solver{
 private:
 	vector<vector<Cell>> world;
-	CellMap wp;
 
 protected:
+	CellMap wp;
 	CellMap& w;
 	short r,c;
 
@@ -26,10 +26,10 @@ public:
 	Solver(CellMap&);
 
 	enum ToB : short {
-		dot=0b00,
-		block=0b11,
-		hline=0b10,
-		vline=0b01
+		dot		=0b00,
+		block	=0b11,
+		hline	=0b10,
+		vline	=0b01
 	};
 
 	enum IO : short {
@@ -47,14 +47,16 @@ public:
 
 	Cell& get(short col, short row,
 			  bool cb=true, bool rb=true) const;
-	void resize(short col, short row,
+	virtual void resize(short col, short row,
 				bool cb=true, bool rb=true);
 
-	virtual inline short io(){return 0x9;};
-	virtual void clean();
-	virtual void clean(short, short);
-	virtual void check();
-	virtual short solve();
+	virtual void clean(short);
+	virtual void clean(short, short, short);
+	virtual short io()=0;
+	virtual void clean()=0;
+	virtual void clean(short, short)=0;
+	virtual void check()=0;
+	virtual short solve()=0;
 };
 }
 #endif // SOLVER_H

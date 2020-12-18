@@ -21,10 +21,10 @@ public:
 	~Sudoku();
 
 	virtual inline short io() override {return 0x88;};
-	virtual void clean();
-	virtual void clean(short, short);
-	virtual void check();
-	virtual short solve();
+	virtual void clean() override;
+	virtual void clean(short, short) override;
+	virtual void check() override;
+	virtual short solve() override;
 };
 }
 }

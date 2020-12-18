@@ -4,17 +4,33 @@
 using namespace LPS;
 
 const class Solverdefine{
-public:
+private:
 	vector<Cell> list[4];
 
+public:
+
 	Solverdefine(){
-		list[Solver::dot].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null, Cell::Shape_dot, 0));
-		list[Solver::block].push_back(Cell(0,0));
-		list[Solver::vline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null,
+		list[Solver::dot].push_back(Cell(0, 0, 0));
+		list[Solver::dot].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
+										 Cell::Shape_dot, 0));
+		list[Solver::dot].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
+										 Cell::Shape_dot | Cell::Shape_blod, 0));
+		list[Solver::block].push_back(Cell(0, 0, 0));
+		list[Solver::block].push_back(Cell(0, 0));
+		list[Solver::vline].push_back(Cell(0, 0, 0));
+		list[Solver::vline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
+						   Cell::Shape_line|Cell::Shape_vdir|Cell::Shape_dash, 0));
+		list[Solver::vline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
 						   Cell::Shape_line|Cell::Shape_vdir, 0));
-		list[Solver::hline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2) | Cell::Group_null,
+		list[Solver::hline].push_back(Cell(0, 0, 0));
+		list[Solver::hline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
+						   Cell::Shape_line|Cell::Shape_hdir|Cell::Shape_dash, 0));
+		list[Solver::hline].push_back(Cell(Cell::Group_defined<<(sizeof(short)<<2),
 						   Cell::Shape_line|Cell::Shape_hdir, 0));
 	}
+
+	const Cell& get(short mode, short b) const{
+		return list[b][((mode>>b*3)&07)%list[b].size()];}
 
 }Sd={};
 
@@ -31,7 +47,6 @@ Solver::Solver(CellMap& W)
 	w.resize(c<<1|1);
 	r = (w[0].size()-1)>>1;
 	for(short i=0; i<w.size(); i++) w[i].resize(r<<1|1);
-	clean();
 }
 
 
@@ -55,19 +70,14 @@ void Solver::resize(short col, short row,
 	c=tmpc, r=tmpr;
 }
 
-void Solver::clean(){
-	for(short i=0;i<=c<<1;i++){
+void Solver::clean(short m){
+	for(short i=0;i<=c<<1;i++)
 		for(short j=0;j<=r<<1;j++)
-			clean(i,j);
-	}
+			clean(m, i, j);
 }
 
-void Solver::clean(short i, short j){
-	*w[i][j] = Sd.list[i<<1&2 | j&1][0];
-	if(!i || !j || i==nc<<1 || j==nr<<1)
+void Solver::clean(short m,short i, short j){
+	*w[i][j] = Sd.get(m, i<<1&2 | j&1);
+	if(m&010000 &&(!i || !j || i==nc<<1 || j==nr<<1))
 		w[i][j]->set(Cell::Shape_blod, Cell::Data_shape_style);
 }
-
-inline void Solver::check(){}
-
-inline short Solver::solve(){return 0;}
